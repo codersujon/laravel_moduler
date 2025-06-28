@@ -4,6 +4,7 @@ namespace Modules\Menu\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Modules\Menu\Models\Menu;
 
 class MenuController extends Controller
 {
@@ -12,7 +13,9 @@ class MenuController extends Controller
      */
     public function index()
     {
-        return view('menu::index');
+        $sidebars = Menu::where('is_active', 1)->where('is_hidden', 1)->get();
+        $menus = Menu::where('is_active', 1)->where('is_hidden', 0)->get();
+        return view('menu::index', compact('sidebars', 'menus'));
     }
 
     /**
@@ -53,4 +56,13 @@ class MenuController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy($id) {}
+
+
+    /**
+     * Main Menu
+     */
+    public function MenuIndex(){
+        $menus = Menu::where('is_active', 1)->get();
+        return view('menu::menu_list', compact('menus'));
+    }
 }
