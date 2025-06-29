@@ -7,6 +7,8 @@ use Illuminate\Support\ServiceProvider;
 use Nwidart\Modules\Traits\PathNamespace;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use Illuminate\Support\Facades\View;
+use Modules\Menu\Models\Menu;
 
 class MenuServiceProvider extends ServiceProvider
 {
@@ -21,6 +23,14 @@ class MenuServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        View::composer([
+            'menu::components.layouts.master',
+        ], function ($view) {
+            $sidebars = Menu::where('is_active', 1)->where('is_hidden', 1)->get();
+            $menus = Menu::where('is_active', 1)->where('is_hidden', 0)->get();
+            $view->with(compact('sidebars', 'menus'));
+        });
+
         $this->registerCommands();
         $this->registerCommandSchedules();
         $this->registerTranslations();

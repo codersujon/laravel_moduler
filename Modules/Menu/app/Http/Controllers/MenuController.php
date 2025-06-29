@@ -13,9 +13,7 @@ class MenuController extends Controller
      */
     public function index()
     {
-        $sidebars = Menu::where('is_active', 1)->where('is_hidden', 1)->get();
-        $menus = Menu::where('is_active', 1)->where('is_hidden', 0)->get();
-        return view('menu::index', compact('sidebars', 'menus'));
+        return view('menu::components.layouts.master');
     }
 
     /**
